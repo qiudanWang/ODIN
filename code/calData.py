@@ -38,20 +38,13 @@ def testData(net1, criterion, CUDA_DEVICE, testloader10, testloader, nnName, dat
         
         inputs = Variable(images.cpu(), requires_grad = True)
         outputs = net1(inputs)
-        print("1")
-        print(outputs)
 
         # Calculating the confidence of the output, no perturbation added here, no temperature scaling used
         nnOutputs = outputs.data.cpu()
-        print(nnOutputs)
         nnOutputs = nnOutputs.numpy()
-        print(nnOutputs)
         nnOutputs = nnOutputs[0]
-        print(nnOutputs)
         nnOutputs = nnOutputs - np.max(nnOutputs)
-        print(nnOutputs)
         nnOutputs = np.exp(nnOutputs)/np.sum(np.exp(nnOutputs))
-        print(nnOutputs)
         
         # Using temperature scaling
         outputs = outputs / temper
@@ -59,10 +52,7 @@ def testData(net1, criterion, CUDA_DEVICE, testloader10, testloader, nnName, dat
         # Calculating the perturbation we need to add, that is,
         # the sign of gradient of cross entropy loss w.r.t. input
         maxIndexTemp = np.argmax(nnOutputs)
-        print("2")
-        print(maxIndexTemp)
         labels = Variable(torch.LongTensor([maxIndexTemp]).cpu())
-        print(labels)
         loss = criterion(outputs, labels)
         loss.backward()
         
